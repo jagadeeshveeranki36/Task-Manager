@@ -1,4 +1,7 @@
-"""Entry point for the Task Manager application."""
+"""Entry point for the Task Manager application.
+
+Author: Jagadeesh Veeranki
+"""
 
 import sys
 import os

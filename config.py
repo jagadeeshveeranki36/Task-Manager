@@ -1,4 +1,7 @@
-"""Central configuration for the Task Manager application."""
+"""Central configuration for the Task Manager application.
+
+Author: Jagadeesh Veeranki
+"""
 
 import os
 
