@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Manager — Jagadeesh Veeranki</title>
+  <meta name="description" content="A modern task manager with reminders, priorities and due dates. Built by Jagadeesh Veeranki." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── TOOLBAR ─────────────────────────────────────────────── -->
+<header class="toolbar">
+  <div class="toolbar-inner">
+    <div class="logo">
+      <span class="logo-icon">✅</span>
+      <span class="logo-text">Task Manager</span>
+    </div>
+    <div class="toolbar-right">
+      <label class="sort-label" for="sortSelect">Sort by:</label>
+      <select id="sortSelect" class="sort-select">
+        <option value="due">Due Date</option>
+        <option value="priority">Priority</option>
+        <option value="created">Created</option>
+        <option value="status">Status</option>
+      </select>
+      <button id="addBtn" class="btn btn-primary">＋ Add Task</button>
+    </div>
+  </div>
+</header>
+
+<!-- ── STATS BAR ───────────────────────────────────────────── -->
+<div class="stats-bar" id="statsBar">
+  <div class="stat-chip" id="statTotal">📋 Total: 0</div>
+  <div class="stat-chip stat-pending" id="statPending">⏳ Pending: 0</div>
+  <div class="stat-chip stat-done" id="statDone">✅ Done: 0</div>
+  <div class="stat-chip stat-overdue" id="statOverdue">🔴 Overdue: 0</div>
+</div>
+
+<!-- ── MAIN CONTENT ────────────────────────────────────────── -->
+<main class="main-content" id="mainContent">
+  <!-- Empty state -->
+  <div class="empty-state" id="emptyState">
+    <div class="empty-icon">🗒️</div>
+    <h2 class="empty-title">No tasks yet</h2>
+    <p class="empty-sub">Click ＋ Add Task to get started</p>
+  </div>
+  <!-- Task list -->
+  <div class="task-list" id="taskList"></div>
+</main>
+
+<!-- ── ADD / EDIT DIALOG ───────────────────────────────────── -->
+<div class="overlay" id="dialogOverlay" aria-hidden="true">
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+    <h2 class="dialog-title" id="dialogTitle">➕ New Task</h2>
+
+    <label class="field-label" for="titleInput">Task Title *</label>
+    <input class="field-input" id="titleInput" type="text" placeholder="What do you need to do?" maxlength="120" />
+
+    <label class="field-label" for="descInput">Description (optional)</label>
+    <textarea class="field-textarea" id="descInput" placeholder="Add details..." rows="3"></textarea>
+
+    <div class="row-group">
+      <div class="col-group">
+        <label class="field-label" for="dateInput">Date</label>
+        <input class="field-input" id="dateInput" type="date" />
+      </div>
+      <div class="col-group">
+        <label class="field-label">Time</label>
+        <div class="time-row">
+          <input class="field-input time-input" id="hourInput" type="number" min="0" max="23" placeholder="09" />
+          <span class="time-sep">:</span>
+          <input class="field-input time-input" id="minInput" type="number" min="0" max="59" placeholder="00" />
+        </div>
+      </div>
+    </div>
+
+    <label class="field-label">Priority</label>
+    <div class="priority-group" id="priorityGroup">
+      <button class="prio-btn" data-priority="Low">⚪ Low</button>
+      <button class="prio-btn prio-selected" data-priority="Medium">🟡 Medium</button>
+      <button class="prio-btn" data-priority="High">🔴 High</button>
+    </div>
+
+    <div class="dialog-actions">
+      <button class="btn btn-ghost" id="cancelBtn">Cancel</button>
+      <button class="btn btn-primary" id="saveBtn">💾 Save Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── DELETE CONFIRM DIALOG ───────────────────────────────── -->
+<div class="overlay" id="deleteOverlay" aria-hidden="true">
+  <div class="dialog dialog-sm" role="dialog" aria-modal="true">
+    <div class="delete-icon">🗑️</div>
+    <h2 class="dialog-title">Delete Task?</h2>
+    <p class="delete-msg" id="deleteMsg">Are you sure?</p>
+    <div class="dialog-actions">
+      <button class="btn btn-ghost" id="deleteCancelBtn">Cancel</button>
+      <button class="btn btn-danger" id="deleteConfirmBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── REMINDER POPUP ──────────────────────────────────────── -->
+<div class="overlay" id="reminderOverlay" aria-hidden="true">
+  <div class="dialog reminder-dialog" role="alertdialog">
+    <div class="reminder-banner">⚠️ TASK ALERT</div>
+    <div class="reminder-body">
+      <div class="reminder-bell">🔔</div>
+      <p class="reminder-prompt">You have to do this task:</p>
+      <div class="reminder-pill" id="reminderTitle"></div>
+      <p class="reminder-sub">Don't let this slip! Complete it now 💪</p>
+      <p class="reminder-due" id="reminderDue"></p>
+      <div class="reminder-actions">
+        <button class="btn btn-primary btn-full" id="reminderComplete">✅ Mark as Complete</button>
+        <button class="btn btn-snooze btn-full" id="reminderSnooze">💤 Snooze 60 min</button>
+        <button class="btn btn-ghost btn-full" id="reminderDismiss">Dismiss</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SUCCESS TOAST ──────────────────────────────────────── -->
+<div class="toast" id="toast" aria-live="polite">✅ Task completed!</div>
+
+<script src="app.js"></script>
+</body>
+</html>
