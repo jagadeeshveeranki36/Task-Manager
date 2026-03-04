@@ -36,3 +36,8 @@ tasks.db
 
 # Pyright / Pylance
 pyrightconfig.json
+
+# PyInstaller build artifacts
+build/
+dist/
+*.spec

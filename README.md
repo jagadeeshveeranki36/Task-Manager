@@ -4,6 +4,10 @@
 
 **Made by Jagadeesh Veeranki**
 
+[![Download](https://img.shields.io/badge/⬇️_Download-.exe-brightgreen?style=for-the-badge)](https://github.com/jagadeesh-veeranki/Task-Manager/releases/latest)
+
+> **No Python required** — just download and run `TaskManager.exe`
+
 ---
 
 ## 📸 Overview
