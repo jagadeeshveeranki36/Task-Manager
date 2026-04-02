@@ -37,6 +37,11 @@ tasks.db
 # Pyright / Pylance
 pyrightconfig.json
 
-# PyInstaller build artifacts (keep dist/ so .exe is pushed to GitHub)
+# PyInstaller build artifacts
 build/
+dist/
 *.spec
+
+# Local assets & docs (not needed on GitHub)
+assets/
+docs
