@@ -47,9 +47,9 @@ class TaskDialog(ctk.CTkToplevel):
     # ── Layout ────────────────────────────────────────────────────────────────
 
     def _build_ui(self):
-        self.configure(fg_color=C["bg"])
+        self.configure(fg_color=C["surface_2"])
 
-        wrapper = ctk.CTkFrame(self, fg_color=C["bg"], corner_radius=0)
+        wrapper = ctk.CTkFrame(self, fg_color=C["surface_2"], corner_radius=0)
         wrapper.pack(fill="both", expand=True, padx=30, pady=24)
 
         # Header
@@ -104,7 +104,7 @@ class TaskDialog(ctk.CTkToplevel):
         self._date_entry = DateEntry(
             date_col,
             width=14,
-            background="#2ECC71",
+            background="#7C3AED",
             foreground="white",
             borderwidth=0,
             date_pattern="yyyy-mm-dd",
@@ -150,7 +150,7 @@ class TaskDialog(ctk.CTkToplevel):
             variable=self._priority_var,
             selected_color=C["primary"],
             selected_hover_color=C["primary_dark"],
-            fg_color=C["primary_glow"],
+            fg_color=C["surface"],
             text_color=C["text"],
             font=ctk.CTkFont("Segoe UI", 13),
             height=36,

@@ -36,14 +36,14 @@ class SuccessToast(ctk.CTkToplevel):
         self.resizable(False, False)
         self.attributes("-topmost", True)
         self.overrideredirect(True)
-        self.configure(fg_color=C["primary"])
+        self.configure(fg_color=C["success"])
 
         ctk.CTkLabel(
             self,
             text=f"  ✅  {message}  ",
             font=ctk.CTkFont("Segoe UI", 13, "bold"),
             text_color="white",
-            fg_color=C["primary"],
+            fg_color=C["success"],
             corner_radius=12,
         ).pack(padx=20, pady=14)
 
@@ -68,8 +68,8 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        ctk.set_appearance_mode("light")
-        ctk.set_default_color_theme("green")
+        ctk.set_appearance_mode("dark")
+        ctk.set_default_color_theme("blue")
 
         self.title(APP_TITLE)
         self.geometry(WINDOW_SIZE)
@@ -78,13 +78,15 @@ class App(ctk.CTk):
 
         # Pending reminder tasks (queued from scheduler thread)
         self._pending_reminders: List[Task] = []
+        # Track task IDs that currently have an open popup (prevent duplicates)
+        self._active_popups: set = set()
 
         self._build_ui()
         self._setup_scheduler()
         self.load_tasks()
 
-        # Poll for pending reminders every 500 ms on the main thread
-        self.after(500, self._check_pending_reminders)
+        # Poll for pending reminders every 100 ms on the main thread
+        self.after(100, self._check_pending_reminders)
 
     # ── Build UI ──────────────────────────────────────────────────────────────
 
@@ -155,7 +157,7 @@ class App(ctk.CTk):
             width=130,
             height=38,
             corner_radius=12,
-            fg_color=C["btn_primary"],
+            fg_color=C["primary"],
             hover_color=C["primary_dark"],
             text_color=C["btn_primary_fg"],
             font=ctk.CTkFont("Segoe UI", 13, "bold"),
@@ -207,32 +209,63 @@ class App(ctk.CTk):
         sched.set_reminder_callback(self._on_reminder_received)
         sched.start()
 
+    def _schedule_exact_for_tasks(self, tasks):
+        """Register exact-time jobs with the scheduler for all upcoming tasks."""
+        sched = get_scheduler()
+        sched.schedule_all_exact(tasks)
+
     def _on_reminder_received(self, task: Task):
         """Called from scheduler thread — queue for main thread processing."""
-        self._pending_reminders.append(task)
+        # Deduplicate: ignore if this task is already queued or showing
+        if task.id not in self._active_popups and not any(
+            t.id == task.id for t in self._pending_reminders
+        ):
+            self._pending_reminders.append(task)
 
     def _check_pending_reminders(self):
         """Drain the pending reminders queue on the main Tk thread."""
         while self._pending_reminders:
             task = self._pending_reminders.pop(0)
             self._show_reminder_popup(task)
-        self.after(500, self._check_pending_reminders)
+        self.after(100, self._check_pending_reminders)
 
     def _show_reminder_popup(self, task: Task):
+        # Guard: don't open a second popup for the same task
+        if task.id in self._active_popups:
+            return
         try:
-            ReminderPopup(self, task, on_complete=lambda t: self._handle_complete(t))
+            self._active_popups.add(task.id)
+
+            def _on_close(t: Task):
+                self._active_popups.discard(t.id)
+                self._handle_complete(t)
+
+            def _on_popup_done(task_id: int):
+                self._active_popups.discard(task_id)
+
+            popup = ReminderPopup(
+                self, task,
+                on_complete=_on_close,
+                on_dismiss=lambda: _on_popup_done(task.id),
+            )
+            # Lift above main window and focus
+            popup.lift()
+            popup.focus_force()
         except Exception as exc:
+            self._active_popups.discard(task.id)
             logger.exception("Failed to show reminder popup: %s", exc)
 
     # ── Task loading ──────────────────────────────────────────────────────────
 
     def load_tasks(self):
-        """Fetch tasks from DB, sort, and render cards."""
+        """Fetch tasks from DB, sort, render cards, and schedule exact reminders."""
         rows = db.get_all_tasks()
         tasks = [Task.from_dict(r) for r in rows]
         tasks = self._sort_tasks(tasks)
         self._render_tasks(tasks)
         self._update_stats(tasks)
+        # Schedule exact-time reminder jobs for upcoming tasks
+        self._schedule_exact_for_tasks(tasks)
 
     def _sort_tasks(self, tasks: List[Task]) -> List[Task]:
         sort = self._sort_var.get()
@@ -280,9 +313,9 @@ class App(ctk.CTk):
         pending = total - done
 
         stats = [
-            ("📋", "Total", total, C["text"]),
-            ("⏳", "Pending", pending, C["primary_dark"]),
-            ("✅", "Done", done, C["primary"]),
+            ("📋", "Total",   total,   C["text"]),
+            ("⏳", "Pending", pending, C["accent"]),
+            ("✅", "Done",    done,    C["success"]),
             ("🔴", "Overdue", overdue, C["priority_high"]),
         ]
 
@@ -332,6 +365,7 @@ class App(ctk.CTk):
         self.load_tasks()
 
     def _handle_delete(self, task: Task):
+        get_scheduler().cancel_exact(task.id)
         db.delete_task(task.id)
         logger.info("Task deleted id=%s", task.id)
         self.load_tasks()

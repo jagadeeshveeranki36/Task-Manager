@@ -11,45 +11,52 @@ DB_PATH = os.path.join(BASE_DIR, "tasks.db")
 LOG_PATH = os.path.join(BASE_DIR, "task_manager.log")
 
 # ── Scheduler ─────────────────────────────────────────────────────────────────
-SCHEDULER_INTERVAL = 60        # seconds between reminder polls
+SCHEDULER_INTERVAL = 5         # seconds between reminder polls (keep small for accuracy)
+NOTIFICATION_COOLDOWN = 300   # seconds before re-notifying the same task (5 min)
 SNOOZE_MINUTES = 60            # minutes to snooze a reminder
 
 # ── Theme ─────────────────────────────────────────────────────────────────────
 THEME_COLORS = {
-    # Base
-    "bg":              "#F5FAF5",      # very light green-tinted white
-    "surface":         "#FFFFFF",      # card surface
-    "border":          "#D4EDD4",      # subtle green border
+    # ── Base ─────────────────────────────────────────────────────────
+    "bg":              "#0F1117",      # deep space navy (main background)
+    "surface":         "#1A1D2E",      # card/surface — slightly lighter navy
+    "surface_2":       "#22263A",      # elevated surface (toolbar, dialogs)
+    "border":          "#2E3357",      # subtle indigo border
 
-    # Brand greens
-    "primary":         "#2ECC71",      # main accent green
-    "primary_dark":    "#27AE60",      # hover / pressed
-    "primary_light":   "#A9DFBF",      # soft accent
-    "primary_glow":    "#D5F5E3",      # glass shimmer
+    # ── Brand — Electric Violet / Indigo ─────────────────────────────
+    "primary":         "#7C3AED",      # electric violet
+    "primary_dark":    "#6D28D9",      # deep violet (hover/pressed)
+    "primary_light":   "#A78BFA",      # soft lavender
+    "primary_glow":    "#1E1535",      # very dark violet tint (button bg)
 
-    # Text
-    "text":            "#1A2E1A",      # dark green-black
-    "text_secondary":  "#5D7A5D",      # muted label
-    "text_muted":      "#9BB49B",      # placeholder / disabled
+    # ── Accent — Vibrant Teal ─────────────────────────────────────────
+    "accent":          "#06B6D4",      # cyan-teal
+    "accent_dark":     "#0891B2",      # darker teal
+    "accent_glow":     "#0E2A35",      # dark teal tint
 
-    # Priority badges
-    "priority_low":    "#7F8C8D",      # grey
-    "priority_medium": "#E67E22",      # amber
-    "priority_high":   "#E74C3C",      # red
+    # ── Text ─────────────────────────────────────────────────────────
+    "text":            "#F1F5F9",      # near-white (primary text)
+    "text_secondary":  "#94A3B8",      # slate grey (labels)
+    "text_muted":      "#475569",      # dim (disabled / placeholder)
 
-    # States
-    "overdue_border":  "#E74C3C",      # red glow for overdue cards
-    "completed_bg":    "#F0FFF0",      # faint green for completed
-    "success":         "#2ECC71",      # success popup accent
+    # ── Priority badges ───────────────────────────────────────────────
+    "priority_low":    "#22C55E",      # vivid green
+    "priority_medium": "#F59E0B",      # amber
+    "priority_high":   "#EF4444",      # vivid red
 
-    # Toolbar / sidebar
-    "toolbar":         "#FFFFFF",
-    "toolbar_border":  "#C8E6C9",
+    # ── States ────────────────────────────────────────────────────────
+    "overdue_border":  "#EF4444",      # red glow for overdue cards
+    "completed_bg":    "#12172A",      # faint dark blue for completed
+    "success":         "#10B981",      # emerald success
 
-    # Buttons
-    "btn_primary":     "#2ECC71",
+    # ── Toolbar / sidebar ─────────────────────────────────────────────
+    "toolbar":         "#13162A",
+    "toolbar_border":  "#2E3357",
+
+    # ── Buttons ───────────────────────────────────────────────────────
+    "btn_primary":     "#7C3AED",
     "btn_primary_fg":  "#FFFFFF",
-    "btn_danger":      "#E74C3C",
+    "btn_danger":      "#EF4444",
     "btn_danger_fg":   "#FFFFFF",
 }
 

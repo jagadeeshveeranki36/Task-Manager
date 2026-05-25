@@ -60,14 +60,14 @@ class Task:
         delta = (self.due_dt - datetime.now()).total_seconds()
         return 0 < delta <= minutes * 60
 
-    def needs_reminder(self, interval_seconds: int = 60) -> bool:
+    def needs_reminder(self, cooldown_seconds: int = 300) -> bool:
         """True if this task should fire a reminder right now.
 
         Conditions:
         - Not completed
-        - Has a due datetime that has passed
+        - Has a due datetime that has passed (or is right now)
         - Not currently snoozed
-        - Has not been notified within the last interval_seconds
+        - Has not been notified within the last cooldown_seconds
         """
         if self.completed or not self.due_dt:
             return False
@@ -77,10 +77,10 @@ class Task:
         # Respect snooze
         if self.snoozed_dt and now < self.snoozed_dt:
             return False
-        # Prevent duplicate notifications
+        # Prevent duplicate notifications within cooldown window
         if self.last_notified_dt:
             elapsed = (now - self.last_notified_dt).total_seconds()
-            if elapsed < interval_seconds:
+            if elapsed < cooldown_seconds:
                 return False
         return True
 

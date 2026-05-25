@@ -144,7 +144,7 @@ class TaskCard(ctk.CTkFrame):
 
         # Due datetime
         if task.due_dt:
-            due_str = task.due_dt.strftime("%d %b %Y  %H:%M")
+            due_str = task.due_dt.strftime("%d %b %Y  %I:%M %p")
             clock_color = C["priority_high"] if task.is_overdue() else C["text_secondary"]
             ctk.CTkLabel(
                 bottom,
