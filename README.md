@@ -1,37 +1,40 @@
 # ✅ Task Manager
 
-> A modern, feature-rich desktop task management application built with Python and CustomTkinter.
+> A modern desktop task management app built with Python and CustomTkinter — dark themed, glassmorphism-styled, and packed with smart reminders.
 
 **Made by Jagadeesh Veeranki**
 
-[![Download](https://img.shields.io/badge/⬇️_Download-.exe-brightgreen?style=for-the-badge)](https://github.com/jagadeesh-veeranki/Task-Manager/releases/latest)
-
-> **No Python required** — just download and run `TaskManager.exe`
+[![GitHub](https://img.shields.io/badge/GitHub-jagadeeshveeranki36-181717?style=for-the-badge&logo=github)](https://github.com/jagadeeshveeranki36/Task-Manager)
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![CustomTkinter](https://img.shields.io/badge/UI-CustomTkinter-7C3AED?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 ---
 
-## 📸 Overview
+## 📸 What is this?
 
-Task Manager is a sleek, fully-featured desktop productivity app that lets you create, manage, track, and get reminded about your tasks — all from a clean, glassmorphism-inspired UI. Built entirely in Python using CustomTkinter for a polished, modern look.
+Task Manager is a fully-featured desktop productivity app that I built in Python. You can create tasks, set due dates and priorities, and the app will alert you with a smooth popup when something is overdue — complete with snooze support, a live countdown, and auto-dismiss after 30 seconds.
+
+It stores everything locally in an SQLite database, so your tasks are always there when you open it. No accounts, no cloud, no fuss.
 
 ---
 
 ## ✨ Features
 
-| Feature | Description |
+| Feature | What it does |
 |---|---|
-| **Create & Edit Tasks** | Add tasks with title, description, due date/time, and priority |
-| **Priority Levels** | Set Low, Medium, or High priority with colour-coded badges |
-| **Smart Reminders** | Background scheduler fires alerts when tasks become overdue |
-| **⚠️ Task Alerts** | Prominent OS-style alert popup with snooze & complete actions |
-| **Snooze Support** | Snooze reminders by 60 minutes with one click |
-| **Sort & Filter** | Sort tasks by Due Date, Priority, Created, or Status |
-| **Stats Dashboard** | Live counters for Total, Pending, Done, and Overdue tasks |
-| **Completion Toast** | Auto-dismissing success toast when you complete a task |
-| **Overdue Highlighting** | Cards with red border & OVERDUE badge for past-due tasks |
-| **Delete Confirmation** | Safe delete flow with a confirmation dialog |
-| **Persistent Storage** | All tasks saved locally in an SQLite database |
-| **Rotating Logs** | Debug logs with 5 MB rotation and 3 backups |
+| **Create & Edit Tasks** | Add a title, description, due date/time, and priority level |
+| **Priority Levels** | Choose Low, Medium, or High — each gets a colour-coded badge |
+| **Smart Reminders** | A background scheduler checks every 5 seconds and fires an alert when tasks are overdue |
+| **Animated Alert Popup** | Slides in from centre, shakes for attention, auto-dismisses after 30 s |
+| **Snooze Support** | Hit snooze on any reminder — it'll come back in 60 minutes |
+| **Sort & Filter** | Sort your tasks by Due Date, Priority, Created, or Status |
+| **Stats Bar** | Live counters at the top — Total, Pending, Done, and Overdue |
+| **Completion Toast** | A little green toast pops up when you tick off a task |
+| **Overdue Highlighting** | Past-due cards get a red border and an OVERDUE badge |
+| **Safe Delete** | Asks for confirmation before removing any task |
+| **Local SQLite Storage** | All data saved locally — no internet needed |
+| **Rotating Logs** | Debug logs auto-rotate at 5 MB so they never pile up |
 
 ---
 
@@ -39,76 +42,87 @@ Task Manager is a sleek, fully-featured desktop productivity app that lets you c
 
 ```
 Task Manager/
-├── main.py                  # Entry point — initialises logging & launches app
-├── config.py                # Central config (paths, theme colours, window size)
-├── logging_config.py        # Rotating file + console logging setup
+├── main.py                  # Entry point — sets up logging and starts the app
+├── config.py                # All constants: colours, paths, window size, intervals
+├── logging_config.py        # Rotating file + console log setup
 ├── requirements.txt         # Python dependencies
 ├── .gitignore
 │
-├── core/                    # Business logic layer
+├── core/                    # Business logic
 │   ├── __init__.py
-│   ├── database.py          # SQLite CRUD operations
-│   ├── models.py            # Task dataclass with helper properties
-│   ├── scheduler.py         # APScheduler background reminder poller
-│   └── notifications.py     # Desktop toast via plyer
+│   ├── database.py          # SQLite CRUD (create, read, update, delete)
+│   ├── models.py            # Task dataclass + helper methods (is_overdue, needs_reminder, etc.)
+│   ├── scheduler.py         # APScheduler background poller + exact-time reminder jobs
+│   └── notifications.py     # Desktop toast notifications via plyer
 │
-└── ui/                      # Presentation layer (CustomTkinter)
-    ├── __init__.py
-    ├── app.py               # Main window, stats bar, task list
-    ├── task_card.py         # Individual task card widget
-    ├── add_edit_dialog.py   # Modal form for creating / editing tasks
-    └── reminder_popup.py    # ⚠️ Alert-style reminder popup
+├── ui/                      # All the visual stuff (CustomTkinter)
+│   ├── __init__.py
+│   ├── app.py               # Main window, toolbar, stats bar, task list
+│   ├── task_card.py         # Individual task card widget
+│   ├── add_edit_dialog.py   # Modal form for creating and editing tasks
+│   └── reminder_popup.py    # Animated alert popup with slide-in, shake, and countdown
+│
+└── web/                     # Standalone web version (HTML / CSS / JS)
+    ├── index.html
+    ├── style.css
+    └── app.js
 ```
 
 ---
 
-## ⚙️ Installation & Setup
+## ⚙️ Setup & Installation
 
-### Prerequisites
-- Python 3.11 or higher
-- pip
+You'll need **Python 3.11 or higher** and **pip**.
 
-### 1. Clone the repository
+### 1. Clone the repo
+
 ```bash
-git clone https://github.com/jagadeesh-veeranki/task-manager.git
-cd task-manager
+git clone https://github.com/jagadeeshveeranki36/Task-Manager.git
+cd Task-Manager
 ```
 
 ### 2. Create a virtual environment (recommended)
+
 ```bash
 python -m venv venv
+
 # Windows
 venv\Scripts\activate
+
 # macOS / Linux
 source venv/bin/activate
 ```
 
 ### 3. Install dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Run the application
+### 4. Run the app
+
 ```bash
 python main.py
 ```
 
----
-
-## 🚀 Usage
-
-1. **Add a task** — Click **＋ Add Task** in the toolbar
-2. **Set details** — Enter title, description, due date/time, and priority
-3. **Save** — Click 💾 Save Task
-4. **Get reminded** — The app checks every 60 seconds; an alert pops up when tasks are overdue
-5. **Complete / Snooze** — Use the reminder popup buttons or the checkbox on each card
-6. **Edit / Delete** — Click the ⋮ menu on any task card
+The database (`tasks.db`) and log file (`task_manager.log`) are created automatically on first run — you don't need to set anything up manually.
 
 ---
 
-## 🗃️ Database
+## 🚀 How to use it
 
-Tasks are stored in a local SQLite file at `tasks.db` (auto-created on first run). The schema:
+1. **Add a task** — Click **＋ Add Task** in the top toolbar
+2. **Fill in the details** — Title (required), description, due date, time, and priority
+3. **Save it** — Click 💾 Save Task
+4. **Get reminded** — When a task becomes overdue, a popup slides in automatically
+5. **Act on it** — Mark it done, snooze it for 60 minutes, or dismiss the alert
+6. **Edit or delete** — Click the ⋮ menu on any task card
+
+---
+
+## 🗃️ Database Schema
+
+Tasks are stored in `tasks.db` (auto-created in the project root). Here's the schema:
 
 ```sql
 CREATE TABLE IF NOT EXISTS tasks (
@@ -128,39 +142,45 @@ CREATE TABLE IF NOT EXISTS tasks (
 
 ## 📋 Configuration
 
-All configuration lives in `config.py`:
+Everything is controlled from `config.py` — no digging through code:
 
-| Constant | Default | Description |
+| Constant | Value | What it controls |
 |---|---|---|
-| `SCHEDULER_INTERVAL` | `60` | Seconds between reminder polls |
-| `SNOOZE_MINUTES` | `60` | Minutes to snooze a reminder |
-| `APP_TITLE` | `"Task Manager"` | Window title |
-| `WINDOW_SIZE` | `"1050x700"` | Default window geometry |
-| `MIN_WINDOW_SIZE` | `(860, 560)` | Minimum resizable size |
+| `SCHEDULER_INTERVAL` | `5` | Seconds between reminder polls |
+| `NOTIFICATION_COOLDOWN` | `300` | Seconds before re-alerting the same task (5 min) |
+| `SNOOZE_MINUTES` | `60` | How long a snooze lasts |
+| `APP_TITLE` | `"Task Manager"` | Window title bar text |
+| `WINDOW_SIZE` | `"1050x700"` | Default window size |
+| `MIN_WINDOW_SIZE` | `(860, 560)` | Minimum resize limit |
 
 ---
 
 ## 📝 Logging
 
-Logs are written to `task_manager.log` with:
-- **Rotating file handler** — 5 MB max, 3 backup files, UTF-8 encoded
-- **Console handler** — INFO level and above printed to stdout
+Logs are written to `task_manager.log` in the project root:
+
+- **File handler** — rotates at 5 MB, keeps 3 backups, UTF-8 encoded
+- **Console handler** — shows INFO and above in your terminal
+
+Both the log file and database are listed in `.gitignore` so they're never accidentally committed.
 
 ---
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/my-feature`
-3. Commit your changes: `git commit -m "feat: add my feature"`
-4. Push to the branch: `git push origin feature/my-feature`
+Contributions are welcome! Here's how:
+
+1. Fork the repo
+2. Create a feature branch — `git checkout -b feature/your-feature`
+3. Make your changes and commit — `git commit -m "feat: describe your change"`
+4. Push to your fork — `git push origin feature/your-feature`
 5. Open a Pull Request
 
 ---
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is open source under the [MIT License](LICENSE).
 
 ---
 
@@ -168,7 +188,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 **Jagadeesh Veeranki**
 
-- GitHub: [@jagadeesh-veeranki](https://github.com/jagadeesh-veeranki)
+- GitHub: [@jagadeeshveeranki36](https://github.com/jagadeeshveeranki36)
 
 ---
 
